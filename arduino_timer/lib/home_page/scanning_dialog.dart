@@ -64,10 +64,16 @@ class ScanningDialog extends StatelessWidget {
                                     final device = state.devices[index];
                                     return AvailableDevice(
                                       device: device,
-                                      onConnect: () {
+                                      onConnect: () async {
                                         final connectionProvider = context
                                             .read<BluetoothConnectionCubit>();
-                                        connectionProvider.connectTo(device);
+                                        connectionProvider
+                                            .connectTo(device)
+                                            .then(
+                                          (value) {
+                                            Navigator.pop(context);
+                                          },
+                                        );
                                       },
                                     );
                                   },
