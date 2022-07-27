@@ -29,25 +29,33 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return MaterialApp(
-      title: 'Arduino Timer',
-      initialRoute: HomePage.route,
-      onGenerateRoute: (routeSettings) {
-        return MaterialPageRoute(
-          builder: (context) {
-            if (routeSettings.name == TimersScreen.route) {
-              return const TimersScreen();
-            }
-            if (routeSettings.name == TimerDetailsScreen.route) {
-              return TimerDetailsScreen(
-                timer: routeSettings.arguments as Timer,
-              );
-            } else {
-              return const HomePage();
-            }
-          },
-        );
-      },
+    final mySystemTheme = SystemUiOverlayStyle.light.copyWith(
+      systemNavigationBarColor: Colors.blue,
+      systemNavigationBarDividerColor: Colors.blue,
+      systemNavigationBarIconBrightness: Brightness.light,
+    );
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: mySystemTheme,
+      child: MaterialApp(
+        title: 'Arduino Timer',
+        initialRoute: HomePage.route,
+        onGenerateRoute: (routeSettings) {
+          return MaterialPageRoute(
+            builder: (context) {
+              if (routeSettings.name == TimersScreen.route) {
+                return const TimersScreen();
+              }
+              if (routeSettings.name == TimerDetailsScreen.route) {
+                return TimerDetailsScreen(
+                  timer: routeSettings.arguments as Timer,
+                );
+              } else {
+                return const HomePage();
+              }
+            },
+          );
+        },
+      ),
     );
   }
 }
