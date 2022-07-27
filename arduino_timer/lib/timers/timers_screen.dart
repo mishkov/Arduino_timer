@@ -1,7 +1,9 @@
+import 'package:arduino_timer/connection_provider.dart';
 import 'package:arduino_timer/timers/database.dart';
 import 'package:arduino_timer/timers/timer.dart';
 import 'package:arduino_timer/timers/timer_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TimersScreen extends StatefulWidget {
   static const route = '/timers';
@@ -44,6 +46,12 @@ class _TimersScreenState extends State<TimersScreen> {
                           setState(() {
                             futureTimers = Database.instance.getAllTimers();
                           });
+                          final bluetooth =
+                              context.read<BluetoothConnectionCubit>();
+
+                          Database.instance.getAllTimers().then((timers) {
+                            bluetooth.sendTimers(timers);
+                          });
                         });
                       },
                     ),
@@ -66,6 +74,11 @@ class _TimersScreenState extends State<TimersScreen> {
           ).then((_) {
             setState(() {
               futureTimers = Database.instance.getAllTimers();
+            });
+            final bluetooth = context.read<BluetoothConnectionCubit>();
+
+            Database.instance.getAllTimers().then((timers) {
+              bluetooth.sendTimers(timers);
             });
           });
         },
