@@ -137,6 +137,7 @@ class BluetoothConnectionCubit extends Cubit<BluetoothConnectionState> {
       DateTime.now().hour,
       DateTime.now().minute,
       for (final timer in timers) ...timer.toBytes(),
+      255,
     ];
     final data = Uint8List.fromList(package);
     _connection?.output.add(data);
