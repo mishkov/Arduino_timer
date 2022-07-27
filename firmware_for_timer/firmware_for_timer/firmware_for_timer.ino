@@ -44,7 +44,7 @@ void Clock::gettime() {}
 
 Clock time = Clock();
 #else
-iarduino_RTC time(RTC_DS1307);
+iarduino_RTC time(RTC_DS3231);
 #endif
 
 // переменная для получения данных
