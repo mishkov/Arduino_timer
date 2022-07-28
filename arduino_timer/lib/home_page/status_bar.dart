@@ -28,7 +28,7 @@ class StatusBar extends StatelessWidget {
             } else if (state.status == BluetoothConnectionStatus.error) {
               message = 'Произошла ошибка';
             } else {
-              message = 'Определенное состояние';
+              message = 'Неопределенное состояние';
             }
 
             return Text(
