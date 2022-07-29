@@ -17,7 +17,7 @@ class Timer {
 
   Timer.simple({
     this.id = -1,
-    this.name = 'Новый таймер',
+    this.name = 'Nuevo timer',
     this.beginHour = 8,
     this.beginMinute = 0,
     this.endHour = 18,
