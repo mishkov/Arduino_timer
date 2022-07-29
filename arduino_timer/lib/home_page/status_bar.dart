@@ -17,18 +17,18 @@ class StatusBar extends StatelessWidget {
           builder: (context, state) {
             String message;
             if (state.status == BluetoothConnectionStatus.unknown) {
-              message = 'Состояние соединения незивестно';
+              message = 'Estado de conexion desconocido';
             } else if (state.status == BluetoothConnectionStatus.connected) {
               message =
-                  'Подключено к ${state.connectedDevice!.name ?? state.connectedDevice!.address}';
+                  'Conectado con ${state.connectedDevice!.name ?? state.connectedDevice!.address}';
             } else if (state.status == BluetoothConnectionStatus.done) {
-              message = 'Соединение завершено';
+              message = 'Conexion terminada';
             } else if (state.status == BluetoothConnectionStatus.finished) {
-              message = 'Соединение закончилось';
+              message = 'Conexion terminada';
             } else if (state.status == BluetoothConnectionStatus.error) {
-              message = 'Произошла ошибка';
+              message = 'Sucedio un error';
             } else {
-              message = 'Неопределенное состояние';
+              message = 'Estado desconocido';
             }
 
             return Text(

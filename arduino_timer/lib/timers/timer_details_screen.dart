@@ -53,16 +53,16 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Редактирование таймера')),
+      appBar: AppBar(title: const Text('Editar timer')),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('имя'),
+            const Text('Nombre'),
             TextField(controller: nameController),
             const SizedBox(height: 8),
-            const Text('от'),
+            const Text('Desde'),
             Row(
               children: [
                 SizedBox(
@@ -85,7 +85,7 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            const Text('до'),
+            const Text('Hasta'),
             Row(
               children: [
                 SizedBox(
@@ -108,14 +108,14 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            const Text('подавать на пин'),
+            const Text('Enviar al pin'),
             TextField(
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               controller: pinController,
             ),
             const SizedBox(height: 8),
-            const Text('значение'),
+            const Text('Valor'),
             DropdownButton<int>(
               value: timerPinValue,
               items: List.generate(2, (index) {
@@ -133,7 +133,7 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                const Text('состояние'),
+                const Text('Estado'),
                 Switch(
                   value: isTimerActive,
                   onChanged: (value) {
@@ -152,7 +152,7 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('Отмена'),
+                    child: const Text('Cancelar'),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -162,7 +162,7 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
                       Database.instance.deleteTimer(widget.timer.id);
                       Navigator.pop(context);
                     },
-                    child: const Text('Удалить'),
+                    child: const Text('Eliminar'),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -184,7 +184,7 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
                         );
                       } catch (e) {
                         const snackBar = SnackBar(
-                          content: Text('неверный формат данных'),
+                          content: Text('Formato de datos incorrecto'),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
@@ -199,7 +199,7 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
                         Navigator.pop(context);
                       }
                     },
-                    child: const Text('Сохранить'),
+                    child: const Text('Guardar'),
                   ),
                 ),
               ],

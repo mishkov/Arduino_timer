@@ -21,7 +21,7 @@ class ConnectionDashboard extends StatelessWidget {
               onPressed: state.connectedDevice != null
                   ? connectionProvider.disconnect
                   : null,
-              child: const Text('Отключиться'),
+              child: const Text('Desconectar'),
             );
           },
         ),
@@ -41,7 +41,7 @@ class ConnectionDashboard extends StatelessWidget {
             );
             connectionProvider.stopScan();
           },
-          child: const Text('Сканировать'),
+          child: const Text('Escanear'),
         ),
       ],
     );

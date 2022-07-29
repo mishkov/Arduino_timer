@@ -26,7 +26,7 @@ class ScanningDialog extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  state.isScanning ? 'Поиск...' : 'Обнаружено',
+                  state.isScanning ? 'Busqueda...' : 'Encontrado',
                   style: const TextStyle(
                     fontSize: 24,
                   ),
@@ -85,7 +85,7 @@ class ScanningDialog extends StatelessWidget {
                         },
                       ),
                     )
-                  : const Text('Устройств не обнуружено'),
+                  : const Text('Equipos no encontrado'),
             ],
           );
         }),
@@ -97,7 +97,7 @@ class ScanningDialog extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('отмена'),
+              child: const Text('Cancelar'),
             ),
           ),
         )

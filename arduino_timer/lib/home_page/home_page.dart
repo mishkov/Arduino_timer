@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ардуино Таймер'),
+        title: const Text('Arduino Timer'),
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(30.0),
           child: StatusBar(),
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                                   );
                                 }
                               : null,
-                          child: const Text('Таймеры'),
+                          child: const Text('Timers'),
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                                   bluetooth.sendTimers(timers);
                                 }
                               : null,
-                          child: const Text('Синхронизировать'),
+                          child: const Text('Sincronizar'),
                         ),
                         const SizedBox(height: 180),
                       ],

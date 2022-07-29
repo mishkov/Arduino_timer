@@ -19,7 +19,7 @@ class AvailableDevice extends StatelessWidget {
         subtitle: Text(device.name != null ? device.address : ''),
         trailing: TextButton(
           onPressed: device.isConnected ? null : onConnect,
-          child: Text(device.isConnected ? 'Подключено' : 'Подключиться'),
+          child: Text(device.isConnected ? 'Conectado' : 'Conectar'),
         ),
       ),
     );

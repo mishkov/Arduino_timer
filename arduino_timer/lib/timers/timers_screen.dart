@@ -21,7 +21,7 @@ class _TimersScreenState extends State<TimersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Таймеры'),
+        title: const Text('Timers'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
