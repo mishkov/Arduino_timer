@@ -1,25 +1,27 @@
 // ЗАМЕТКИ
 //
 // В последнем байте памяти лежит количество счетчиков
+//
+// Сколько скетч занимал без дебаг кода
+// Sketch uses 11234 bytes (78%) of program storage space. Maximum is 14336 bytes.
+// Global variables use 717 bytes (70%) of dynamic memory, leaving 307 bytes for local variables. Maximum is 1024 bytes.
 
-// Включает режим отладки, позволяющий проверить корректность получения данных
-// по блютуз. При включенной отладке блютуз модуль должен быть подключен:
-// rx -> 11, tx -> 12. Также при включенной отладке можно смотреть вывод
-// сообщений в сериал порт. Важно отметить, что режим отладки не использует
-// модуль реального времени, вместо него время хранится в полях класса,
-// поэтому при каждом включении устройства необходимо заново синхронизировать
-// таймеры
+#define DEBUG_SETUP false
+#define DEBUG_TIMERS_COUNT false
+#define DEBUG_CURRENT_TIME true
+#define DEBUG_ACTIVE_TIMERS false
+
+inline void LOG(String message) {
+   Serial.print("DEBUG:");
+   Serial.println(message);
+}
+
 #include <Wire.h>
 #include <iarduino_RTC.h>
 #include <EEPROM.h>
 #include <SoftwareSerial.h>
 
 iarduino_RTC time(RTC_DS1307);
-
-//inline void LOG(String message) { 
-//  Serial.print("DEBUG: ");
-//  Serial.println(message);
-//}
 
 const byte rxPin = 11;
 const byte txPin = 12;
@@ -30,6 +32,15 @@ void setup()
   time.begin();
   Serial.begin(9600);
   bluetoothSerial.begin(9600);
+  if (DEBUG_TIMERS_COUNT) {
+    LOG("setup:tms_cnt:" + EEPROM.read(EEPROM.length() - 1));
+  }
+
+  if (DEBUG_ACTIVE_TIMERS) {
+    for(int i = 0; i < EEPROM.read(EEPROM.length() - 1); ++i) {
+      LOG(String("setup:acttm:" + i) + "=" + EEPROM.read(i * 7));
+    }
+  }
 }
 
 // 1 - hour
@@ -47,6 +58,9 @@ void loop()
 {
   if(bluetoothSerial.available() > 0)
   {
+    if (DEBUG_SETUP) {
+      LOG("bl recid smth");
+    }
     if (nextByteType == 1) {
       values = bluetoothSerial.read();
       // считывание и установка часов
@@ -87,6 +101,21 @@ void loop()
         }
       }
     }
+
+    if (DEBUG_TIMERS_COUNT) {
+      LOG("setup:tms_cnt:" + EEPROM.read(EEPROM.length() - 1));
+    }
+
+    if (DEBUG_ACTIVE_TIMERS) {
+    for(int i = 0; i < EEPROM.read(EEPROM.length() - 1); ++i) {
+      LOG(String("setup:acttm:" + i) + "=" + EEPROM.read(i * 7));
+    }
+  }
+  }
+
+  if (DEBUG_CURRENT_TIME) {
+    time.gettime();
+    LOG("mnts:" + String(to_minutes(time.Hours, time.minutes)));
   }
   
   delay(500);
