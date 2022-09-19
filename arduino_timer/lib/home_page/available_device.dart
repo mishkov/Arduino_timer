@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AvailableDevice extends StatelessWidget {
   const AvailableDevice({
@@ -19,7 +20,11 @@ class AvailableDevice extends StatelessWidget {
         subtitle: Text(device.name != null ? device.address : ''),
         trailing: TextButton(
           onPressed: device.isConnected ? null : onConnect,
-          child: Text(device.isConnected ? 'Conectado' : 'Conectar'),
+          child: Text(
+            device.isConnected
+                ? AppLocalizations.of(context)!.connected
+                : AppLocalizations.of(context)!.connect,
+          ),
         ),
       ),
     );

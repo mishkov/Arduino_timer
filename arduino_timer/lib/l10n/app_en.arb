@@ -25,5 +25,6 @@
     "state": "State",
     "remove": "Remove",
     "incorrectDataFormat": "Incorrect Data Format",
-    "save": "Save"
+    "save": "Save",
+    "newTimer": "New Timer"
 }

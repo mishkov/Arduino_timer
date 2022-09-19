@@ -67,7 +67,9 @@ class _TimersScreenState extends State<TimersScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          final timer = Timer.simple();
+          final timer = Timer.simple(
+            name: AppLocalizations.of(context)!.newTimer,
+          );
           Navigator.pushNamed(
             context,
             TimerDetailsScreen.route,
