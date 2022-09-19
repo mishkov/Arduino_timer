@@ -74,7 +74,9 @@ class ListTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      isScanning ? 'Busqueda...' : 'Encontrado',
+      isScanning
+          ? AppLocalizations.of(context)!.search
+          : AppLocalizations.of(context)!.detected,
       style: const TextStyle(
         fontSize: 24,
       ),
