@@ -4,6 +4,7 @@ import 'package:arduino_timer/timers/database.dart';
 import 'package:arduino_timer/timers/timers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:arduino_timer/connection_provider.dart';
 
@@ -20,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Arduino Timer'),
+        title: Text(AppLocalizations.of(context)!.appName),
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(30.0),
           child: StatusBar(),
