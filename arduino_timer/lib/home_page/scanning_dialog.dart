@@ -4,15 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
 import '../connection_provider.dart';
-import '../sliver_list_with_contoller_layout.dart';
 
 class ScanningDialog extends StatelessWidget {
-  ScanningDialog({
+  const ScanningDialog({
     Key? key,
   }) : super(key: key);
-
-  final availableDevicesListScrollController = ScrollController();
-  final updateLayoutController = UpdateLayoutController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,55 +33,31 @@ class ScanningDialog extends StatelessWidget {
                 ),
                 Expanded(
                   child: state.devices.isNotEmpty
-                      ? BlocListener<BluetoothConnectionCubit,
+                      ? BlocBuilder<BluetoothConnectionCubit,
                           BluetoothConnectionState>(
-                          listenWhen: (previous, current) {
+                          buildWhen: (previous, current) {
                             return previous.devices.length !=
                                 current.devices.length;
                           },
-                          listener: (context, state) {
-                            if (availableDevicesListScrollController
-                                .hasClients) {
-                              updateLayoutController.layoutUpdater?.call();
-                              availableDevicesListScrollController.animateTo(
-                                availableDevicesListScrollController
-                                    .position.maxScrollExtent,
-                                duration: const Duration(seconds: 1),
-                                curve: Curves.ease,
-                              );
-                            }
+                          builder: (context, state) {
+                            return ListView.builder(
+                              itemCount: state.devices.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                final device = state.devices[index];
+
+                                return AvailableDevice(
+                                  device: device,
+                                  onConnect: () async {
+                                    onAvailableDeviceSelected(
+                                      context,
+                                      device,
+                                    );
+                                  },
+                                );
+                              },
+                            );
                           },
-                          child: BlocBuilder<BluetoothConnectionCubit,
-                              BluetoothConnectionState>(
-                            builder: (context, state) {
-                              return CustomScrollView(
-                                controller:
-                                    availableDevicesListScrollController,
-                                shrinkWrap: true,
-                                slivers: [
-                                  SliverListWithControlledLayout(
-                                    updateLayoutController:
-                                        updateLayoutController,
-                                    delegate: SliverChildBuilderDelegate(
-                                      (context, index) {
-                                        final device = state.devices[index];
-                                        return AvailableDevice(
-                                          device: device,
-                                          onConnect: () async {
-                                            onAvailableDeviceSelected(
-                                              context,
-                                              device,
-                                            );
-                                          },
-                                        );
-                                      },
-                                      childCount: state.devices.length,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
                         )
                       : const Text('Equipos no encontrado'),
                 ),
