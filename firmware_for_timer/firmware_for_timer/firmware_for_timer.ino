@@ -2,13 +2,16 @@
 //
 // В последнем байте памяти лежит количество счетчиков
 //
-// Сколько скетч занимал без дебаг кода
-// Sketch uses 11234 bytes (78%) of program storage space. Maximum is 14336 bytes.
-// Global variables use 717 bytes (70%) of dynamic memory, leaving 307 bytes for local variables. Maximum is 1024 bytes.
+// Подключение блютуз модуля: 
+// HC-O5    Arduino
+// VCC   ->      5V
+// GND   ->     GND
+// TXD   ->     D11
+// RXD   ->     D12
 
 #define DEBUG_SETUP false
 #define DEBUG_TIMERS_COUNT false
-#define DEBUG_CURRENT_TIME true
+#define DEBUG_CURRENT_TIME false
 #define DEBUG_ACTIVE_TIMERS false
 
 inline void LOG(String message) {
@@ -16,12 +19,11 @@ inline void LOG(String message) {
    Serial.println(message);
 }
 
-#include <Wire.h>
-#include <iarduino_RTC.h>
+#include <RTClib.h>
 #include <EEPROM.h>
 #include <SoftwareSerial.h>
 
-iarduino_RTC time(RTC_DS1307);
+RTC_DS3231 rtc;
 
 const byte rxPin = 11;
 const byte txPin = 12;
@@ -29,7 +31,23 @@ SoftwareSerial bluetoothSerial(rxPin, txPin);
 
 void setup()
 {  
-  time.begin();
+#ifndef ESP8266
+  while (!Serial); // wait for serial port to connect. Needed for native USB
+#endif
+
+  if (!rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    Serial.flush();
+    while (1) delay(10);
+  }
+
+  if (rtc.lostPower()) {
+    Serial.println("RTC lost power, let's set the time!");
+    // When time needs to be set on a new device, or after a power loss, the
+    // following line sets the RTC to the date & time this sketch was compiled
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
+  
   Serial.begin(9600);
   bluetoothSerial.begin(9600);
   if (DEBUG_TIMERS_COUNT) {
@@ -47,8 +65,9 @@ void setup()
 // 2 - minute
 // 3 - timer data
 int nextByteType = 1;
-
+int hour;
 byte values;
+bool isInSyncMode = false;
 
 unsigned int to_minutes(unsigned int hours, unsigned int minutes) {
   return (60*hours)+minutes;
@@ -58,22 +77,24 @@ void loop()
 {
   if(bluetoothSerial.available() > 0)
   {
+    isInSyncMode = true;
     if (DEBUG_SETUP) {
       LOG("bl recid smth");
     }
     if (nextByteType == 1) {
       values = bluetoothSerial.read();
-      // считывание и установка часов
-      time.settime(0,-1, values);
+      // считывание часов
+      hour = values;
 
       nextByteType = 2;
 
     }
     if (nextByteType == 2) {
+      // TODO: Add check for returned value
       values = bluetoothSerial.read();
-      // считывание и установка минут
-      time.settime(0, values);
-
+      // считывание и установка времени
+      rtc.adjust(DateTime(2022, 1, 1, hour, values, 0));
+      
       nextByteType = 3;
       
       // очищаем энергонезависимую память
@@ -102,20 +123,22 @@ void loop()
       }
     }
 
+    isInSyncMode = false;
+
     if (DEBUG_TIMERS_COUNT) {
       LOG("setup:tms_cnt:" + EEPROM.read(EEPROM.length() - 1));
     }
 
     if (DEBUG_ACTIVE_TIMERS) {
-    for(int i = 0; i < EEPROM.read(EEPROM.length() - 1); ++i) {
-      LOG(String("setup:acttm:" + i) + "=" + EEPROM.read(i * 7));
+      for(int i = 0; i < EEPROM.read(EEPROM.length() - 1); ++i) {
+        LOG(String("setup:acttm:" + i) + "=" + EEPROM.read(i * 7));
+      }
     }
-  }
   }
 
   if (DEBUG_CURRENT_TIME) {
-    time.gettime();
-    LOG("mnts:" + String(to_minutes(time.Hours, time.minutes)));
+    DateTime now = rtc.now();
+    LOG("mnts:" + String(to_minutes(now.hour(), now.minute())));
   }
   
   delay(500);
@@ -126,11 +149,11 @@ void loop()
     if(EEPROM.read(i * 7 + 0) == 1)
     {
       bool find = 0;
-      time.gettime();
+      DateTime now = rtc.now();
       
       // если пришло время для работы
-      if((to_minutes(EEPROM.read(i * 7 + 1), EEPROM.read(i * 7 + 2)) <= to_minutes(time.Hours, time.minutes)) &&
-         (to_minutes(EEPROM.read(i * 7 + 3), EEPROM.read(i * 7 + 4)) > to_minutes(time.Hours, time.minutes))) 
+      if((to_minutes(EEPROM.read(i * 7 + 1), EEPROM.read(i * 7 + 2)) <= to_minutes(now.hour(), now.minute())) &&
+         (to_minutes(EEPROM.read(i * 7 + 3), EEPROM.read(i * 7 + 4)) > to_minutes(now.hour(), now.minute()))) 
       {
         // настраиваем пин таймера как выход
         pinMode(EEPROM.read(i * 7 + 5), OUTPUT);
@@ -146,8 +169,8 @@ void loop()
           if(EEPROM.read(i * 7 + 5) == EEPROM.read(j * 7 + 5) && (i != j) && (EEPROM.read(j * 7 + 0) == 1))
           {
             // и если нашли таймер с таким же пином и если для него время пришло
-            if((to_minutes(EEPROM.read(j * 7 + 1), EEPROM.read(j * 7 + 2)) <= to_minutes(time.Hours, time.minutes)) && 
-               (to_minutes(EEPROM.read(j * 7 + 3), EEPROM.read(j * 7 + 4)) > to_minutes(time.Hours, time.minutes)))
+            if((to_minutes(EEPROM.read(j * 7 + 1), EEPROM.read(j * 7 + 2)) <= to_minutes(now.hour(), now.minute())) && 
+               (to_minutes(EEPROM.read(j * 7 + 3), EEPROM.read(j * 7 + 4)) > to_minutes(now.hour(), now.minute())))
             {
               // настраиваем пин таймера как выход
               pinMode(EEPROM.read(i * 7 + 5), OUTPUT);
