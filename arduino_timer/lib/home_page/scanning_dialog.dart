@@ -15,14 +15,11 @@ class ScanningDialog extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Expanded(
-          child:
-              BlocBuilder<BluetoothConnectionCubit, BluetoothConnectionState>(
-            buildWhen: (previous, current) {
-              return previous.devices.length != current.devices.length;
-            },
-            builder: listBuilder,
-          ),
+        BlocBuilder<BluetoothConnectionCubit, BluetoothConnectionState>(
+          buildWhen: (previous, current) {
+            return previous.devices.length != current.devices.length;
+          },
+          builder: listBuilder,
         ),
         Align(
           alignment: Alignment.bottomRight,
@@ -50,7 +47,8 @@ class ScanningDialog extends StatelessWidget {
               ? const ListTitle.scanning()
               : const ListTitle.finished(),
         ),
-        Expanded(
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 400),
           child: DevicesList(devices: state.devices),
         ),
       ],
