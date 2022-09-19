@@ -1,6 +1,7 @@
 import 'package:arduino_timer/connection_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StatusBar extends StatelessWidget {
   const StatusBar({
@@ -17,18 +18,18 @@ class StatusBar extends StatelessWidget {
           builder: (context, state) {
             String message;
             if (state.status == BluetoothConnectionStatus.unknown) {
-              message = 'Estado de conexion desconocido';
+              message = AppLocalizations.of(context)!.unknownConnectionState;
             } else if (state.status == BluetoothConnectionStatus.connected) {
               message =
-                  'Conectado con ${state.connectedDevice!.name ?? state.connectedDevice!.address}';
+                  '${AppLocalizations.of(context)!.connectedTo} ${state.connectedDevice!.name ?? state.connectedDevice!.address}';
             } else if (state.status == BluetoothConnectionStatus.done) {
-              message = 'Conexion terminada';
+              message = AppLocalizations.of(context)!.doneConnection;
             } else if (state.status == BluetoothConnectionStatus.finished) {
-              message = 'Conexion terminada';
+              message = AppLocalizations.of(context)!.endConnection;
             } else if (state.status == BluetoothConnectionStatus.error) {
-              message = 'Sucedio un error';
+              message = AppLocalizations.of(context)!.errorOccured;
             } else {
-              message = 'Estado desconocido';
+              message = AppLocalizations.of(context)!.undefinedState;
             }
 
             return Text(
