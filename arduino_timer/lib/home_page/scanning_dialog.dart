@@ -1,6 +1,7 @@
 import 'package:arduino_timer/home_page/available_device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 
 import '../connection_provider.dart';
 import '../sliver_list_with_contoller_layout.dart';
@@ -71,15 +72,9 @@ class ScanningDialog extends StatelessWidget {
                                         return AvailableDevice(
                                           device: device,
                                           onConnect: () async {
-                                            final connectionProvider =
-                                                context.read<
-                                                    BluetoothConnectionCubit>();
-                                            connectionProvider
-                                                .connectTo(device)
-                                                .then(
-                                              (value) {
-                                                Navigator.pop(context);
-                                              },
+                                            onAvailableDeviceSelected(
+                                              context,
+                                              device,
                                             );
                                           },
                                         );
@@ -111,6 +106,18 @@ class ScanningDialog extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  Future<void> onAvailableDeviceSelected(
+    BuildContext context,
+    BluetoothDevice device,
+  ) async {
+    final connectionProvider = context.read<BluetoothConnectionCubit>();
+    connectionProvider.connectTo(device).then(
+      (value) {
+        Navigator.pop(context);
+      },
     );
   }
 }
