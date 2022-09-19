@@ -18,52 +18,29 @@ class ScanningDialog extends StatelessWidget {
         Expanded(
           child:
               BlocBuilder<BluetoothConnectionCubit, BluetoothConnectionState>(
-                  builder: (context, state) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    state.isScanning ? 'Busqueda...' : 'Encontrado',
-                    style: const TextStyle(
-                      fontSize: 24,
+            buildWhen: (previous, current) {
+              return previous.devices.length != current.devices.length;
+            },
+            builder: (context, state) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      state.isScanning ? 'Busqueda...' : 'Encontrado',
+                      style: const TextStyle(
+                        fontSize: 24,
+                      ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: state.devices.isNotEmpty
-                      ? BlocBuilder<BluetoothConnectionCubit,
-                          BluetoothConnectionState>(
-                          buildWhen: (previous, current) {
-                            return previous.devices.length !=
-                                current.devices.length;
-                          },
-                          builder: (context, state) {
-                            return ListView.builder(
-                              itemCount: state.devices.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                final device = state.devices[index];
-
-                                return AvailableDevice(
-                                  device: device,
-                                  onConnect: () async {
-                                    onAvailableDeviceSelected(
-                                      context,
-                                      device,
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        )
-                      : const Text('Equipos no encontrado'),
-                ),
-              ],
-            );
-          }),
+                  Expanded(
+                    child: DevicesList(devices: state.devices),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
         Align(
           alignment: Alignment.bottomRight,
@@ -78,6 +55,39 @@ class ScanningDialog extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class DevicesList extends StatelessWidget {
+  const DevicesList({Key? key, required this.devices}) : super(key: key);
+
+  final List<BluetoothDevice> devices;
+
+  @override
+  Widget build(BuildContext context) {
+    if (devices.isEmpty) {
+      return const Text('Equipos no encontrado');
+    }
+
+    return ListView.builder(
+      itemCount: devices.length,
+      shrinkWrap: true,
+      itemBuilder: itemBuilder,
+    );
+  }
+
+  Widget itemBuilder(context, index) {
+    final device = devices[index];
+
+    return AvailableDevice(
+      device: device,
+      onConnect: () async {
+        onAvailableDeviceSelected(
+          context,
+          device,
+        );
+      },
     );
   }
 
