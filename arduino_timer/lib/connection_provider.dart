@@ -93,6 +93,10 @@ class BluetoothConnectionCubit extends Cubit<BluetoothConnectionState> {
       await _bluetooth.requestEnable();
     }
 
+    if (await _bluetooth.isDiscovering ?? false) {
+      _bluetooth.cancelDiscovery();
+    }
+
     final scaning = _bluetooth.startDiscovery();
     _devices.clear();
     emit(state.copyWith(devices: _devices, isScanning: true));
