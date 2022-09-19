@@ -6,6 +6,7 @@ import 'package:arduino_timer/timers/timers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'home_page/home_page.dart';
 
@@ -38,6 +39,16 @@ class MyApp extends StatelessWidget {
       value: mySystemTheme,
       child: MaterialApp(
         title: 'Arduino Timer',
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en', ''), // English, no country code
+          Locale('es', ''), // Spanish, no country code
+          Locale('ru', ''), // Russian, no country code
+        ],
         initialRoute: HomePage.route,
         onGenerateRoute: (routeSettings) {
           return MaterialPageRoute(
