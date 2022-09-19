@@ -4,6 +4,7 @@ import 'package:arduino_timer/timers/timer.dart';
 import 'package:arduino_timer/timers/timer_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimersScreen extends StatefulWidget {
   static const route = '/timers';
@@ -21,7 +22,7 @@ class _TimersScreenState extends State<TimersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Timers'),
+        title: Text(AppLocalizations.of(context)!.timers),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),

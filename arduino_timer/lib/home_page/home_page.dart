@@ -5,6 +5,7 @@ import 'package:arduino_timer/timers/timers_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:arduino_timer/connection_provider.dart';
 
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                                   );
                                 }
                               : null,
-                          child: const Text('Timers'),
+                          child: Text(AppLocalizations.of(context)!.timers),
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
@@ -84,7 +85,8 @@ class _HomePageState extends State<HomePage> {
                                   bluetooth.sendTimers(timers);
                                 }
                               : null,
-                          child: const Text('Sincronizar'),
+                          child:
+                              Text(AppLocalizations.of(context)!.synchronize),
                         ),
                         const SizedBox(height: 180),
                       ],

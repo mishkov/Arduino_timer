@@ -2,6 +2,7 @@ import 'package:arduino_timer/home_page/available_device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../connection_provider.dart';
 
@@ -30,7 +31,7 @@ class ScanningDialog extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Cancelar'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
           ),
         )
@@ -89,7 +90,7 @@ class DevicesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (devices.isEmpty) {
-      return const Text('Equipos no encontrado');
+      return Text(AppLocalizations.of(context)!.noDeviceDetected);
     }
 
     return ListView.builder(

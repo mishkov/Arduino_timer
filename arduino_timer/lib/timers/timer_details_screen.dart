@@ -2,6 +2,7 @@ import 'package:arduino_timer/timers/database.dart';
 import 'package:arduino_timer/timers/timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimerDetailsScreen extends StatefulWidget {
   static const route = '/timer_details';
@@ -53,16 +54,16 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Editar timer')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.timerEditing)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Nombre'),
+            Text(AppLocalizations.of(context)!.name),
             TextField(controller: nameController),
             const SizedBox(height: 8),
-            const Text('Desde'),
+            Text(AppLocalizations.of(context)!.from),
             Row(
               children: [
                 SizedBox(
@@ -85,7 +86,7 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            const Text('Hasta'),
+            Text(AppLocalizations.of(context)!.to),
             Row(
               children: [
                 SizedBox(
@@ -108,14 +109,14 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            const Text('Enviar al pin'),
+            Text(AppLocalizations.of(context)!.writeToPin),
             TextField(
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               controller: pinController,
             ),
             const SizedBox(height: 8),
-            const Text('Valor'),
+            Text(AppLocalizations.of(context)!.value),
             DropdownButton<int>(
               value: timerPinValue,
               items: List.generate(2, (index) {
@@ -133,7 +134,7 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                const Text('Estado'),
+                Text(AppLocalizations.of(context)!.state),
                 Switch(
                   value: isTimerActive,
                   onChanged: (value) {
@@ -152,7 +153,7 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('Cancelar'),
+                    child: Text(AppLocalizations.of(context)!.cancel),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -162,7 +163,7 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
                       Database.instance.deleteTimer(widget.timer.id);
                       Navigator.pop(context);
                     },
-                    child: const Text('Eliminar'),
+                    child: Text(AppLocalizations.of(context)!.remove),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -183,8 +184,9 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
                           isTimerActive,
                         );
                       } catch (e) {
-                        const snackBar = SnackBar(
-                          content: Text('Formato de datos incorrecto'),
+                        final snackBar = SnackBar(
+                          content: Text(AppLocalizations.of(context)!
+                              .incorrectDataFormat),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
@@ -199,7 +201,7 @@ class _TimerDetailsScreenState extends State<TimerDetailsScreen> {
                         Navigator.pop(context);
                       }
                     },
-                    child: const Text('Guardar'),
+                    child: Text(AppLocalizations.of(context)!.save),
                   ),
                 ),
               ],

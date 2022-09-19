@@ -2,6 +2,7 @@ import 'package:arduino_timer/connection_provider.dart';
 import 'package:arduino_timer/home_page/scanning_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConnectionDashboard extends StatelessWidget {
   const ConnectionDashboard({
@@ -21,7 +22,7 @@ class ConnectionDashboard extends StatelessWidget {
               onPressed: state.connectedDevice != null
                   ? connectionProvider.disconnect
                   : null,
-              child: const Text('Desconectar'),
+              child: Text(AppLocalizations.of(context)!.disconnect),
             );
           },
         ),
@@ -41,7 +42,7 @@ class ConnectionDashboard extends StatelessWidget {
             );
             connectionProvider.stopScan();
           },
-          child: const Text('Escanear'),
+          child: Text(AppLocalizations.of(context)!.scan),
         ),
       ],
     );
