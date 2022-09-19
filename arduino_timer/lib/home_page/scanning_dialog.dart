@@ -17,7 +17,7 @@ class ScanningDialog extends StatelessWidget {
       children: [
         BlocBuilder<BluetoothConnectionCubit, BluetoothConnectionState>(
           buildWhen: (previous, current) {
-            return previous.isScanning != previous.isScanning ||
+            return previous.isScanning != current.isScanning ||
                 previous.devices.length != current.devices.length;
           },
           builder: listBuilder,
