@@ -21,22 +21,7 @@ class ScanningDialog extends StatelessWidget {
             buildWhen: (previous, current) {
               return previous.devices.length != current.devices.length;
             },
-            builder: (context, state) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: state.isScanning
-                        ? const ListTitle.scanning()
-                        : const ListTitle.finished(),
-                  ),
-                  Expanded(
-                    child: DevicesList(devices: state.devices),
-                  ),
-                ],
-              );
-            },
+            builder: listBuilder,
           ),
         ),
         Align(
@@ -51,6 +36,23 @@ class ScanningDialog extends StatelessWidget {
             ),
           ),
         )
+      ],
+    );
+  }
+
+  Widget listBuilder(context, state) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: state.isScanning
+              ? const ListTitle.scanning()
+              : const ListTitle.finished(),
+        ),
+        Expanded(
+          child: DevicesList(devices: state.devices),
+        ),
       ],
     );
   }
