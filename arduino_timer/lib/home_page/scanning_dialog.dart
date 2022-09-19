@@ -27,12 +27,9 @@ class ScanningDialog extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      state.isScanning ? 'Busqueda...' : 'Encontrado',
-                      style: const TextStyle(
-                        fontSize: 24,
-                      ),
-                    ),
+                    child: state.isScanning
+                        ? const ListTitle.scanning()
+                        : const ListTitle.finished(),
                   ),
                   Expanded(
                     child: DevicesList(devices: state.devices),
@@ -55,6 +52,30 @@ class ScanningDialog extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class ListTitle extends StatelessWidget {
+  const ListTitle.scanning({
+    Key? key,
+  })  : isScanning = true,
+        super(key: key);
+
+  const ListTitle.finished({
+    Key? key,
+  })  : isScanning = false,
+        super(key: key);
+
+  final bool isScanning;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      isScanning ? 'Busqueda...' : 'Encontrado',
+      style: const TextStyle(
+        fontSize: 24,
+      ),
     );
   }
 }
